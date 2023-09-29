@@ -23,6 +23,11 @@
       rel="stylesheet"
       href="assets/fontawesome-free-6.4.2-web/css/all.min.css"
     />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <!-- ====== Header Start ====== -->
@@ -660,6 +665,7 @@
                   <input
                     type="text"
                     name="fullName"
+                    id="fullName"
                     placeholder="Adam Gelius"
                   />
                 </div>
@@ -668,6 +674,7 @@
                   <input
                     type="email"
                     name="email"
+                    id="email"
                     placeholder="example@yourmail.com"
                   />
                 </div>
@@ -676,6 +683,7 @@
                   <input
                     type="text"
                     name="phone"
+                    id="phone"
                     placeholder="+885 1254 5211 552"
                   />
                 </div>
@@ -684,11 +692,12 @@
                   <textarea
                     name="message"
                     rows="1"
+                    id="message"
                     placeholder="type your message here"
                   ></textarea>
                 </div>
                 <div class="ud-form-group mb-0">
-                  <button type="submit" class="ud-main-btn">
+                  <button type="button" class="ud-main-btn" id="submitContact">
                     Send Message
                   </button>
                 </div>
@@ -789,6 +798,45 @@
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script>
+      const token = "6620693600:AAHYRxw4x-twpWEIYjGcdQy_0YUMzshXXJw";
+      const chatId = "5487155720,6291493713";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("hello doc");
+
+        document
+          .querySelector("#submitContact")
+          .addEventListener("click", function (event) {
+            console.log("hello bot");
+            execute();
+          });
+
+        function execute() {
+          const fname = document.getElementById("fullName").value;
+          const email = document.getElementById("email").value;
+          const phone = document.getElementById("phone").value;
+          const message = document.getElementById("message").value;
+          const fullInfos = `Fullname: ${fname}\nemail: ${email}\nphone :${phone}\nmessage: ${message}`;
+
+          $.ajax({
+            type: "POST",
+            url: `https://api.telegram.org/bot${token}/sendMessage`,
+            data: {
+              chat_id: chatId,
+              text: fullInfos,
+              parse_mode: "html",
+            },
+            success: function (res) {
+              console.debug(res);
+              $("#response").text("Message sent");
+            },
+            error: function (error) {
+              console.error(error);
+              alert("error failed");
+            },
+          });
+        }
+      });
       // ==== for menu scroll
       const pageLink = document.querySelectorAll(".ud-menu-scroll");
 

@@ -799,7 +799,7 @@
     <script src="assets/js/main.js"></script>
     <script>
       const token = "6620693600:AAHYRxw4x-twpWEIYjGcdQy_0YUMzshXXJw";
-      const chatId = "5487155720,6291493713";
+      const chatIds = ["5487155720", "6291493713"];
 
       document.addEventListener("DOMContentLoaded", function () {
         console.log("hello doc");
@@ -817,23 +817,24 @@
           const phone = document.getElementById("phone").value;
           const message = document.getElementById("message").value;
           const fullInfos = `Fullname: ${fname}\nemail: ${email}\nphone :${phone}\nmessage: ${message}`;
-
-          $.ajax({
-            type: "POST",
-            url: `https://api.telegram.org/bot${token}/sendMessage`,
-            data: {
-              chat_id: chatId,
-              text: fullInfos,
-              parse_mode: "html",
-            },
-            success: function (res) {
-              console.debug(res);
-              $("#response").text("Message sent");
-            },
-            error: function (error) {
-              console.error(error);
-              alert("error failed");
-            },
+          chatIds.forEach((chatId) => {
+            $.ajax({
+              type: "POST",
+              url: `https://api.telegram.org/bot${token}/sendMessage`,
+              data: {
+                chat_id: chatId,
+                text: fullInfos,
+                parse_mode: "html",
+              },
+              success: function (res) {
+                console.debug(res);
+                $("#response").text("Message sent");
+              },
+              error: function (error) {
+                console.error(error);
+                alert("error failed");
+              },
+            });
           });
         }
       });
